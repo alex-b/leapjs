@@ -71,16 +71,16 @@ var handParcoords = d3.parcoords()("#hands")
     palmNormalX: -1,
     palmNormalY: -1,
     palmNormalZ: -1,
+    pitch: -Math.PI/2,
+    roll: -Math.PI/2,
+    yaw: -Math.PI/2,
     palmPositionX: -250,
     palmPositionY: 0,
     palmPositionZ: -250,
     palmVelocityX: -1000,
     palmVelocityY: -1000,
     palmVelocityZ: -1000,
-    sphereCenterX: -250,
-    sphereCenterY: 0,
-    sphereCenterZ: -250,
-    sphereRadius: 0,
+    sphereRadius: 0
   }, {
     id: 25,
     directionX: 1,
@@ -89,15 +89,15 @@ var handParcoords = d3.parcoords()("#hands")
     palmNormalX: 1,
     palmNormalY: 1,
     palmNormalZ: 1,
+    pitch: Math.PI/2,
+    roll: Math.PI/2,
+    yaw: Math.PI/2,
     palmPositionX: 250,
     palmPositionY: 400,
     palmPositionZ: 250,
     palmVelocityX: 1000,
     palmVelocityY: 1000,
     palmVelocityZ: 1000,
-    sphereCenterX: 250,
-    sphereCenterY: 400,
-    sphereCenterZ: 250,
     sphereRadius: 200
   }])
   .alpha(1)
@@ -139,15 +139,15 @@ Leap.loop(function(obj) {
       palmNormalX: d.palmNormal[0],
       palmNormalY: d.palmNormal[1],
       palmNormalZ: d.palmNormal[2],
+      pitch: d.pitch(),
+      roll: d.roll(),
+      yaw: d.yaw(),
       palmPositionX: d.palmPosition[0],
       palmPositionY: d.palmPosition[1],
       palmPositionZ: d.palmPosition[2],
       palmVelocityX: d.palmVelocity[0],
       palmVelocityY: d.palmVelocity[1],
       palmVelocityZ: d.palmVelocity[2],
-      sphereCenterX: d.sphereCenter[0],
-      sphereCenterY: d.sphereCenter[1],
-      sphereCenterZ: d.sphereCenter[2],
       sphereRadius: d.sphereRadius
     }
   });
