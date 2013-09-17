@@ -6,6 +6,8 @@ html, body {
   margin: 30px auto 80px;
   width: 990px;
   font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #222;
 }
 a {
   color: #07a;
@@ -19,27 +21,27 @@ a:hover {
 }
 .item {
   float: left;
-  width: 300px;
-  margin: 30px 20px;
-  height: 170px;
+  width: 170px;
+  margin: 20px 16px;
+  height: 130px;
 }
 .item img {
-  width: 300px;
-  height: 150px;
+  width: 170px;
+  height: 85px;
   border: 1px solid #ddd;
+  margin: 3px 0 0;
 }
 dt {
   margin: 0;
   padding: 0;
   line-height: 1em;
-  color: #000;
-  font-weight: bold;
   font-size: 13px;
+  color: #222;
 }
 dd {
   margin: 0;
   padding: 0;
-  font-size: 13px;
+  font-size: 10px;
   color: #666;
 }
 dd a,
@@ -47,7 +49,7 @@ dd a:visited {
   color: #07a;
 }
 .credit {
-  font-size: 13px;
+  font-size: 10px;
   color: #07a;
 }
 </style>
@@ -58,185 +60,193 @@ dd a:visited {
 <div id="examples">
   <div class="item">
     <a href="dom-visualizer.html">
+      <dt>CSS 3D Visualizer</dt>
       <img src="images/dom-visualizer.png"/>
-      <dt>Hand and Finger 3D Visualizer</dt>
     </a>
-    <dd>DOM based visualizer of the data</dd>
+    <dd>DOM based visualizer</dd>
     <div class="credit"><a href="https://github.com/juliangarnier">@juliangarnier</a></div>
   </div>
   <div class="item">
     <a href="earthRotation/index.html">
-      <img src="images/earth.png"/>
       <dt>3D Globe</dt>
+      <img src="images/earth.png"/>
     </a>
     <dd>3D Spinnable globe</dd>
     <div class="credit"><a href="https://github.com/rtilton1">@rtilton1</a></div>
   </div>
   <div class="item">
     <a href="visualizer.html">
-      <img src="images/threefingers.png"/>
       <dt>Three.js visualizer</dt>
+      <img src="images/threefingers.png"/>
     </a>
     <dd>Finger visualizer using <a href="http://mrdoob.github.com/three.js/">Three.js</a></dd>
   </div>
   <div class="item">
     <a href="dumper.html">
-      <img src="images/dumper.png"/>
       <dt>Printout</dt>
+      <img src="images/dumper.png"/>
     </a>
-    <dd>Displays JSON data coming from websocket</dd>
+    <dd>Dumps JSON data stream</dd>
   </div>
   <div class="item">
     <a href="camera.html">
-      <img src="images/camera.png"/>
       <dt>Camera Movement</dt>
+      <img src="images/camera.png"/>
     </a>
-    <dd>Move the scene through grasping actions</dd>
+    <dd>Move scene with grasping actions</dd>
   </div>
   <div class="item">
     <a href="hue-saturation.html">
-      <img src="images/hsl.png"/>
       <dt>Hue Saturation Color Space</dt>
+      <img src="images/hsl.png"/>
     </a>
-    <dd>Move through color space with palm position</dd>
+    <dd>Move through colors with palm position</dd>
   </div>
   <div class="item">
     <a href="canvas-fingers.html">
-      <img src="images/fingers.png"/>
       <dt>Canvas Fingers</dt>
+      <img src="images/fingers.png"/>
     </a>
-    <dd>Finger positions in the plane of the screen</dd>
+    <dd>Finger positions in xy plane</dd>
   </div>
   <div class="item">
     <a href="canvas-spiral.html">
-      <img src="images/spiral.png"/>
       <dt>Canvas Spiral</dt>
+      <img src="images/spiral.png"/>
     </a>
     <dd>Rotate your wrist to coil the spiral</dd>
   </div>
   <div class="item">
     <a href="gestures-dump.html">
-      <img src="images/gestures.png"/>
       <dt>Gesture JSON Printout</dt>
+      <img src="images/gestures.png"/>
     </a>
     <dd>Prints out gesture data as JSON</dd>
   </div>
   <div class="item">
     <a href="recorder.html">
+      <dt>Motion Recorder</dt>
       <img src="images/recorder.png"/>
-      <dt>Leap Motion Recorder</dt>
     </a>
     <dd>Record motion data as JSON</dd>
     <div class="credit"><a href="https://github.com/syntagmatic">@syntagmatic</a></div>
   </div>
   <div class="item">
     <a href="replayer.html">
+      <dt>Motion Replayer</dt>
       <img src="images/replayer.png"/>
-      <dt>Leap Motion Replayer</dt>
     </a>
     <dd>Replay recorded motion data<br/>
     Doesn't require Leap!</dd>
   </div>
   <div class="item">
     <a href="parcoords.html">
-      <img src="images/parcoords.png"/>
       <dt>Pointable and Hand Data</dt>
+      <img src="images/parcoords.png"/>
     </a>
-    <dd>Multidimensional view in <a href="http://syntagmatic.github.io/parallel-coordinates/">parallel coordinates</a></dd>
+    <dd>Multidimensional <a href="http://syntagmatic.github.io/parallel-coordinates/">parallel coordinates</a></dd>
     <div class="credit"><a href="https://github.com/syntagmatic">@syntagmatic</a></div>
   </div>
   <div class="item">
     <a href="http://inkmotion.org/">
-      <img src="images/inkmotion.png"/>
       <dt>Ink Motion</dt>
+      <img src="images/inkmotion.png"/>
     </a>
     <dd>Fluid drawing with screen calibration</dd>
     <div class="credit"><a href="https://github.com/deckar01">@deckar01</a></div>
   </div>
   <div class="item">
     <a href="motion-dump.html">
-      <img src="images/motiondump.png"/>
       <dt>Motion Printout</dt>
+      <img src="images/motiondump.png"/>
     </a>
     <dd>Data produced by the Motions API</dd>
   </div>
   <div class="item">
     <a href="http://www.soulwire.co.uk/experiments/webgl-gpu-particles/">
-      <img src="images/gpuParticles.png"/>
       <dt>1,048,576 Particles</dt>
+      <img src="images/gpuParticles.png"/>
     </a>
     <dd>GPU Physics with WebGL - <a href="https://github.com/soulwire/WebGL-GPU-Particles">github </a></dd>
     <div class="credit"><a href="https://twitter.com/soulwire">@soulwire</a></div>
   </div>
   <div class="item">
     <a href="http://cabbibo.com/leap/meshGallery/">
-      <img src="images/meshmanipulation.png"/>
       <dt>Mesh Manipulation</dt>
+      <img src="images/meshmanipulation.png"/>
     </a>
-    <dd>Deform a sphere wireframe by tugging vertices</dd>
+    <dd>Deform a sphere by tugging vertices</dd>
     <div class="credit"><a href="https://twitter.com/cabbibo">@cabbibo</a></div>
   </div>
   <div class="item">
     <a href="http://cabbibo.com/leap/leapSnake/">
-      <img src="images/leapdragon.png"/>
       <dt>Leap Dragon</dt>
+      <img src="images/leapdragon.png"/>
     </a>
     <dd>Circular traces accelerate a hyptonizing spiral</dd>
     <div class="credit"><a href="https://twitter.com/cabbibo">@cabbibo</a></div>
   </div>
   <div class="item">
     <a href="http://molefrog.com/helga/knife/">
-      <img src="images/knife.png"/>
       <dt>Knife</dt>
+      <img src="images/knife.png"/>
     </a>
     <dd>Exploding particle system - <a href="http://vimeo.com/64812106">development process</a></dd>
     <div class="credit"><a href="https://github.com/molefrog">@molefrog</a></div>
   </div>
   <div class="item">
     <a href="draw.html">
-      <img src="images/draw.png"/>
       <dt>Draw</dt>
+      <img src="images/draw.png"/>
     </a>
     <dd>Dead simple drawing app - <a href="https://github.com/tmcw/leap-simple">github</a></dd>
     <div class="credit"><a href="https://github.com/tmcw/">@tmcw</a></div>
   </div>
   <div class="item">
     <a href="http://yujiangtham.com/leap/theremin/">
-      <img src="images/theremin.png"/>
       <dt>Theremin</dt>
+      <img src="images/theremin.png"/>
     </a>
     <dd>An <a href="http://en.wikipedia.org/wiki/Theremin">ætherphone</a> for two hands - <a href="https://github.com/ytham/theremin">github</a></dd>
     <div class="credit"><a href="https://github.com/ytham">@ytham</a></div>
   </div>
   <div class="item">
     <a href="glsl.html">
-      <img src="images/glsl.png"/>
       <dt>Hello glsj.js</dt>
+      <img src="images/glsl.png"/>
     </a>
     <dd>A simple WebGL shader with <a href="https://github.com/gre/glsl.js">glsl.js</dd>
     <div class="credit"><a href="https://github.com/syntagmatic">@syntagmatic</a></div>
   </div>
   <div class="item">
     <a href="three.html">
-      <img src="images/three.png"/>
       <dt>Hello Three.js</dt>
+      <img src="images/three.png"/>
     </a>
     <dd>Minimal <a href="http://threejs.org/">Three.js</a> example</dd>
     <div class="credit"><a href="https://twitter.com/cabbibo">@cabbibo</a></div>
   </div>
   <div class="item">
     <a href="motion-dump.html">
-      <img src="images/motiondump.png"/>
       <dt>Motion Printout</dt>
+      <img src="images/motiondump.png"/>
     </a>
     <dd>Data produced by the Motions API</dd>
   </div>
   <div class="item">
     <a href="2-hands.html">
-      <img src="images/2hands.png"/>
       <dt>2 Hands 10 Fingers</dt>
+      <img src="images/2hands.png"/>
     </a>
     <dd>How many do you have?</dd>
+  </div>
+  <div class="item">
+    <a href="pitch-roll-yaw.html">
+      <dt>Pitch, Roll, Yaw</dt>
+      <img src="images/pitchrollyaw.png"/>
+    </a>
+    <dd>Six degrees of freedom</dd>
+    <div class="credit"><a href="https://github.com/syntagmatic">@syntagmatic</a></div>
   </div>
   <div style="clear: both;"></div>
 </div>

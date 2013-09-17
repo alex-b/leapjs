@@ -1,0 +1,120 @@
+<canvas id="leap-overlay" width=600 height=400></canvas>
+<p>based on the <a href="https://en.wikipedia.org/wiki/Six_degrees_of_freedom">six degrees of freedom</a></p>
+<script src="../leap.js"></script>
+<script>
+var canvas = document.getElementById("leap-overlay");
+
+var ctx = canvas.getContext("2d");
+ctx.translate(canvas.width/2,canvas.height/2);
+ctx.fillStyle = "#000";
+ctx.font = "14px Monospace";
+
+function draw(obj) {
+  if (obj.hands.length > 0) {
+    ctx.clearRect(-canvas.width/2,-canvas.height/2,canvas.width,canvas.height);
+
+    var hand = obj.hands[0];
+    var pos = hand.palmPosition;
+
+    // labels
+    ctx.textAlign = "center";
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = "#e6e6e6";
+    ctx.fillStyle = "#555";
+    vec3([1,1,1], ["up","right","back"]);
+    ctx.rotate(Math.PI);
+    vec3([1,1,1], ["down","left","forward"]);
+    ctx.rotate(Math.PI);
+
+    ctx.save();
+
+    // pitch
+    ctx.rotate(-Math.PI/2);
+    ctx.fillStyle = "rgba(15,58,150,1)";
+    arcLabel("pitch");
+    ctx.fillStyle = "rgba(15,58,150,0.4)";
+    ctx.beginPath();
+    ctx.moveTo(0,0)
+    arc(hand.pitch());
+    ctx.fill();
+
+    // yaw
+    ctx.rotate(Math.PI/3);
+    ctx.fillStyle = "rgba(15,140,58,1)";
+    arcLabel("yaw");
+    ctx.fillStyle = "rgba(15,140,58,0.4)";
+    ctx.beginPath();
+    ctx.moveTo(0,0)
+    arc(hand.yaw());
+    ctx.fill();
+
+    // roll
+    ctx.rotate(Math.PI/3);
+    ctx.fillStyle = "rgba(150,38,15,1)";
+    arcLabel("roll");
+    ctx.fillStyle = "rgba(150,38,15,0.4)";
+    ctx.beginPath();
+    ctx.moveTo(0,0)
+    arc(hand.roll());
+    ctx.fill();
+
+    ctx.restore();
+
+    ctx.textAlign = "start";
+    ctx.fillText("Pitch " + hand.pitch().toFixed(2), -260, 0);
+    ctx.fillText(" Roll " + hand.roll().toFixed(2), -260, 20);
+    ctx.fillText("  Yaw " + hand.yaw().toFixed(2), -260, 40);
+
+    ctx.fillText("X " + pos[0].toFixed(2), 190, 0);
+    ctx.fillText("Y " + pos[1].toFixed(2), 190, 20);
+    ctx.fillText("Z " + pos[2].toFixed(2), 190, 40);
+
+    ctx.strokeStyle = "#000";
+    vec3([
+      (pos[1]-200)/200,
+      pos[0]/200,
+      pos[2]/200
+    ]);
+  }
+};
+
+function arc(angle) {
+  if (angle >=0) {
+    ctx.arc(0,0,angle*100/(Math.PI/2),0,Math.PI/3);
+  } else {
+    ctx.rotate(Math.PI);
+    ctx.arc(0,0,-angle*100/(Math.PI/2),0,Math.PI/3);
+    ctx.rotate(Math.PI);
+  }
+};
+
+function arcLabel(d) {
+  ctx.rotate(2*Math.PI/3);
+  ctx.fillText(d,0,-130);
+  ctx.rotate(Math.PI);
+  ctx.fillText(d,0,-130);
+  ctx.rotate(Math.PI/3);
+}
+
+function vec3(vec,label) {
+  line(vec[0]);
+  if (label) ctx.fillText(label[0],0,-130*vec[0]);
+  ctx.rotate(2*Math.PI/3);
+  line(vec[1]);
+  if (label) ctx.fillText(label[1],0,-130*vec[1]);
+  ctx.rotate(2*Math.PI/3);
+  line(vec[2]);
+  if (label) ctx.fillText(label[2],0,-130*vec[2]);
+  ctx.rotate(2*Math.PI/3);
+};
+
+function line(d) {
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.lineTo(0,-100*d);
+  ctx.stroke();
+};
+
+// listen to Leap Motion
+Leap.loop(draw);
+</script>
