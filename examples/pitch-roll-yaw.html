@@ -1,22 +1,87 @@
-<canvas id="leap-overlay" width=600 height=400></canvas>
+<canvas id="hand-1" width=360 height=360></canvas>
+<canvas id="hand-2" width=360 height=360></canvas>
+<canvas id="hand-3" width=360 height=360></canvas>
+<canvas id="hand-4" width=360 height=360></canvas>
 <p>based on the <a href="https://en.wikipedia.org/wiki/Six_degrees_of_freedom">six degrees of freedom</a></p>
 <script src="../leap.js"></script>
 <script>
-var canvas = document.getElementById("leap-overlay");
+// calibrated positions
+var origin = {
+  pos: [0,0,0],
+  pitch: 0,
+  roll: 0,
+  yaw: 0
+};
 
-var ctx = canvas.getContext("2d");
-ctx.translate(canvas.width/2,canvas.height/2);
-ctx.fillStyle = "#000";
-ctx.font = "14px Monospace";
-ctx.lineWidth = 4;
+var canvas = [
+  document.getElementById("hand-1"),
+  document.getElementById("hand-2"),
+  document.getElementById("hand-3"),
+  document.getElementById("hand-4")
+];
+
+var viz =[
+  sixDegrees(canvas[0]),
+  sixDegrees(canvas[1]),
+  sixDegrees(canvas[2]),
+  sixDegrees(canvas[3])
+]
+
+// Leap Motion controller
+var leap = Leap.loop(draw);
+
+window.onkeypress = function(e) {
+  // press space to recalibrate origin
+  if (e.charCode == 32) {
+    console.log("Calibrating new reference frame...");
+
+    var frame = leap.lastFrame;
+    console.log("Frame data");
+    console.log(frame);
+
+    if (frame.hands.length > 0) {
+      var hand = frame.hands[0];
+      console.log("New reference frame");
+      recalibrate(hand);
+      console.log(origin);
+    }
+    return false;
+  }
+};
+
+function recalibrate(hand) {
+  origin.pos = hand.palmPosition;
+  origin.pitch = hand.pitch();
+  origin.roll = hand.roll();
+  origin.yaw = hand.yaw();
+  return origin;
+};
 
 function draw(obj) {
-  if (obj.hands.length > 0) {
-    ctx.clearRect(-canvas.width/2,-canvas.height/2,canvas.width,canvas.height);
+  viz.forEach(function(d) {
+    d.clear();
+  });
+  obj.hands.forEach(function(hand,i) {
+    if (i > 3) return;
 
-    var hand = obj.hands[0];
-    var pos = hand.palmPosition;
+    var pos = subtract(hand.palmPosition, origin.pos);
 
+    var pitch = hand.pitch() - origin.pitch;
+    var roll = hand.roll() - origin.roll;
+    var yaw = hand.yaw() - origin.yaw;
+
+    viz[i](pos, pitch, roll, yaw);
+  });
+};
+
+function sixDegrees(canvas) {
+  var ctx = canvas.getContext("2d");
+  ctx.translate(canvas.width/2,canvas.height/2);
+  ctx.fillStyle = "#000";
+  ctx.font = "14px Monospace";
+  ctx.lineWidth = 4;
+
+  var self = function(pos, pitch, roll, yaw) {
     ctx.save();
     // labels
     ctx.textAlign = "center";
@@ -31,82 +96,94 @@ function draw(obj) {
     ctx.textAlign = "center";
     // pitch
     ctx.rotate(-Math.PI/2);
-    rotation(hand, "pitch", [15,58,150]);
+    rotation("pitch", pitch, [15,58,150]);
     // yaw
     ctx.rotate(Math.PI/3);
-    rotation(hand, "yaw", [15,140,58]);
+    rotation("yaw", yaw, [15,140,58]);
     // roll
     ctx.rotate(Math.PI/3);
-    rotation(hand, "roll", [150,30,15]);
+    rotation("roll", roll, [150,30,15]);
     ctx.restore();
 
-    ctx.textAlign = "start";
-    ctx.fillText("Pitch " + hand.pitch().toFixed(2), -260, 0);
-    ctx.fillText(" Roll " + hand.roll().toFixed(2), -260, 20);
-    ctx.fillText("  Yaw " + hand.yaw().toFixed(2), -260, 40);
-
-    ctx.fillText("X " + pos[0].toFixed(2), 190, 0);
-    ctx.fillText("Y " + pos[1].toFixed(2), 190, 20);
-    ctx.fillText("Z " + pos[2].toFixed(2), 190, 40);
 
     ctx.save();
     ctx.strokeStyle = "#000";
     vec3([
-      (pos[1]-200)/200,
+      pos[1]/200,
       pos[0]/200,
       pos[2]/200
     ]);
     ctx.restore();
-  }
-};
+  };
 
-function arc(angle) {
-  if (angle >=0) {
-    ctx.arc(0,0,angle*100/(Math.PI/2),0,Math.PI/3);
-  } else {
+  self.clear = function() {
+    ctx.clearRect(-canvas.width/2,-canvas.height/2,canvas.width,canvas.height);
+  };
+
+  function arc(angle) {
+    if (angle >=0) {
+      ctx.arc(0,0,angle*100/(Math.PI/2),0,Math.PI/3);
+    } else {
+      ctx.rotate(Math.PI);
+      ctx.arc(0,0,-angle*100/(Math.PI/2),0,Math.PI/3);
+      ctx.rotate(Math.PI);
+    }
+  };
+
+  function arcLabel(d) {
+    ctx.rotate(2*Math.PI/3);
+    ctx.fillText(d,0,-130);
     ctx.rotate(Math.PI);
-    ctx.arc(0,0,-angle*100/(Math.PI/2),0,Math.PI/3);
-    ctx.rotate(Math.PI);
+    ctx.fillText(d,0,-130);
+    ctx.rotate(Math.PI/3);
   }
+
+  // renders rotation as arc radius
+  function rotation(type, angle, color) {
+    ctx.fillStyle = "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",1)";
+    arcLabel(type);
+    ctx.fillStyle = "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",0.5)";
+    ctx.beginPath();
+    ctx.moveTo(0,0)
+    arc(angle);
+    ctx.fill();
+  };
+
+  function vec3(vec,label) {
+    line(vec[0]);
+    if (label) ctx.fillText(label[0],0,-130*vec[0]);
+    ctx.rotate(2*Math.PI/3);
+    line(vec[1]);
+    if (label) ctx.fillText(label[1],0,-130*vec[1]);
+    ctx.rotate(2*Math.PI/3);
+    line(vec[2]);
+    if (label) ctx.fillText(label[2],0,-130*vec[2]);
+    ctx.rotate(2*Math.PI/3);
+  };
+
+  function line(d) {
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(0,-100*d);
+    ctx.stroke();
+  };
+
+  function angles(normal,direction) {
+    return {
+      pitch: Math.atan2(direction[1], -direction[2]),
+      roll: Math.atan2(normal[0], -normal[1]),
+      yaw: Math.atan2(direction[0], -direction[2])
+    };
+  };
+
+  return self;
 };
 
-function arcLabel(d) {
-  ctx.rotate(2*Math.PI/3);
-  ctx.fillText(d,0,-130);
-  ctx.rotate(Math.PI);
-  ctx.fillText(d,0,-130);
-  ctx.rotate(Math.PI/3);
-}
-
-function rotation(hand, type, color) {
-  ctx.fillStyle = "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",1)";
-  arcLabel(type);
-  ctx.fillStyle = "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",0.5)";
-  ctx.beginPath();
-  ctx.moveTo(0,0)
-  arc(hand[type]());
-  ctx.fill();
+function subtract(a,b) {
+  return [
+    a[0] - b[0],
+    a[1] - b[1],
+    a[2] - b[2]
+  ]
 };
-
-function vec3(vec,label) {
-  line(vec[0]);
-  if (label) ctx.fillText(label[0],0,-130*vec[0]);
-  ctx.rotate(2*Math.PI/3);
-  line(vec[1]);
-  if (label) ctx.fillText(label[1],0,-130*vec[1]);
-  ctx.rotate(2*Math.PI/3);
-  line(vec[2]);
-  if (label) ctx.fillText(label[2],0,-130*vec[2]);
-  ctx.rotate(2*Math.PI/3);
-};
-
-function line(d) {
-  ctx.beginPath();
-  ctx.moveTo(0,0);
-  ctx.lineTo(0,-100*d);
-  ctx.stroke();
-};
-
-// listen to Leap Motion
-Leap.loop(draw);
 </script>
